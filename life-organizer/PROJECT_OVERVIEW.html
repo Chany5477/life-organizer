@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Life Organizer · 项目交付清单</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+  color: #1f2937;
+  line-height: 1.6;
+  padding: 24px 16px 60px;
+}
+.container { max-width: 900px; margin: 0 auto; }
+.hero {
+  background: linear-gradient(135deg, #7c3aed, #4c1d95);
+  color: white;
+  padding: 36px 24px;
+  border-radius: 20px;
+  text-align: center;
+  margin-bottom: 24px;
+  box-shadow: 0 10px 30px rgba(124,58,237,0.2);
+}
+.hero h1 { font-size: 32px; margin-bottom: 8px; }
+.hero .subtitle { opacity: 0.9; font-size: 14px; }
+.section {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 16px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+}
+h2 { color: #7c3aed; font-size: 18px; margin-bottom: 12px; border-left: 3px solid #7c3aed; padding-left: 10px; }
+h3 { font-size: 14px; margin-top: 12px; margin-bottom: 8px; color: #4b5563; }
+.badges { display: flex; gap: 6px; flex-wrap: wrap; margin: 12px 0; }
+.badge { background: #f5f3ff; color: #6d28d9; padding: 4px 10px; border-radius: 99px; font-size: 12px; font-weight: 600; }
+.badge.green { background: #d1fae5; color: #065f46; }
+.badge.blue { background: #dbeafe; color: #1e40af; }
+.badge.orange { background: #fed7aa; color: #9a3412; }
+.tree {
+  background: #f9fafb;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px;
+  overflow-x: auto;
+  border: 1px solid #e5e7eb;
+}
+.tree .folder { color: #7c3aed; font-weight: 600; }
+.tree .file { color: #374151; }
+.tree .comment { color: #9ca3af; }
+.file-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 8px;
+}
+.file-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+}
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+.feature {
+  background: linear-gradient(135deg, #f5f3ff, #ede9fe);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid #e9d5ff;
+}
+.feature h4 { color: #6d28d9; font-size: 14px; margin-bottom: 6px; }
+.feature p { font-size: 13px; color: #4b5563; }
+.steps {
+  counter-reset: step;
+}
+.step {
+  display: flex;
+  gap: 12px;
+  align-items: start;
+  margin-bottom: 12px;
+  padding: 12px;
+  background: #f9fafb;
+  border-radius: 10px;
+  border-left: 3px solid #7c3aed;
+}
+.step::before {
+  counter-increment: step;
+  content: counter(step);
+  flex-shrink: 0;
+  width: 28px; height: 28px;
+  background: #7c3aed;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+.warning {
+  background: #fef3c7;
+  border-left: 4px solid #f59e0b;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #92400e;
+  margin: 12px 0;
+}
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid #e5e7eb; }
+th { color: #6d28d9; background: #f5f3ff; }
+td code { background: #f3f4f6; padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+a { color: #7c3aed; }
+.phone-frame {
+  width: 280px;
+  height: 560px;
+  margin: 16px auto;
+  background: #111;
+  border-radius: 36px;
+  padding: 14px;
+  position: relative;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+}
+.phone-screen {
+  background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+  border-radius: 22px;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.phone-screen::before {
+  content: '';
+  position: absolute;
+  top: 12px; left: 50%; transform: translateX(-50%);
+  width: 100px; height: 6px;
+  background: #111; border-radius: 3px;
+}
+.mock-content {
+  padding: 40px 14px 70px;
+  height: 100%;
+  overflow: hidden;
+}
+.mock-header {
+  text-align: center;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.mock-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  font-size: 9px;
+}
+.mock-grid div {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+.mock-grid .today { background: #7c3aed; color: white; font-weight: bold; }
+.mock-grid .has-event { background: #ddd6fe; }
+.mock-grid .empty { color: #6b7280; }
+.mock-nav {
+  position: absolute;
+  bottom: 8px; left: 8px; right: 8px;
+  background: white; border-top: 1px solid #e5e7eb;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  padding: 8px 0 6px;
+  font-size: 9px;
+}
+.mock-nav div {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 2px;
+  color: #6b7280;
+}
+.mock-nav .active { color: #7c3aed; font-weight: bold; }
+.checklist {
+  list-style: none;
+  padding: 0;
+}
+.checklist li {
+  padding: 8px 0;
+  display: flex; gap: 10px;
+  align-items: center;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 13px;
+}
+.checklist li::before {
+  content: '☐';
+  font-size: 18px;
+  color: #d1d5db;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="hero">
+  <h1>🌟 Life Organizer</h1>
+  <div class="subtitle">日程 · 日历 · 日记 · SOP 一体化 PWA</div>
+  <div class="badges" style="justify-content: center; margin-top: 16px;">
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">Next.js 14</span>
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">TypeScript</span>
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">Supabase</span>
+    <span class="badge" style="background: rgba(255,255,255,0.2); color: white;">PWA</span>
+    <span class="badge green" style="background: rgba(16,185,129,0.9);">完全免费</span>
+  </div>
+</div>
+
+<!-- 模拟界面预览 -->
+<div class="phone-frame">
+  <div class="phone-screen">
+    <div class="mock-content">
+      <div class="mock-header">2026 年 10 月</div>
+      <div class="mock-grid">
+        <div style="font-weight: 600; color: #9ca3af;">日</div>
+        <div style="font-weight: 600; color: #9ca3af;">一</div>
+        <div style="font-weight: 600; color: #9ca3af;">二</div>
+        <div style="font-weight: 600; color: #9ca3af;">三</div>
+        <div style="font-weight: 600; color: #9ca3af;">四</div>
+        <div style="font-weight: 600; color: #9ca3af;">五</div>
+        <div style="font-weight: 600; color: #9ca3af;">六</div>
+        <div class="empty">28</div><div class="empty">29</div><div class="empty">30</div>
+        <div class="empty">1</div><div class="empty">2</div><div class="empty">3</div><div class="empty">4</div>
+        <div class="empty">5</div><div class="has-event">6</div><div class="empty">7</div>
+        <div class="empty">8</div><div class="today">9</div><div class="has-event">10</div><div class="empty">11</div>
+        <div class="empty">12</div><div class="empty">13</div><div class="has-event">14</div><div class="empty">15</div>
+        <div class="empty">16</div><div class="has-event">17</div><div class="empty">18</div>
+        <div class="empty">19</div><div class="has-event">20</div><div class="empty">21</div>
+        <div class="empty">22</div><div class="has-event">23</div><div class="empty">24</div>
+        <div class="empty">25</div>
+      </div>
+    </div>
+    <div class="mock-nav">
+      <div class="active"><div>📅</div>计划</div>
+      <div><div>📊</div>总结</div>
+      <div><div>📔</div>日记</div>
+      <div><div>📋</div>SOP</div>
+    </div>
+  </div>
+</div>
+
+<!-- 4 大模块概览 -->
+<div class="section">
+  <h2>📦 四大功能模块</h2>
+  <div class="feature-grid">
+    <div class="feature">
+      <h4>📅 计划</h4>
+      <p>年/月/日三级日历视图 · 事件提醒 · 重复事件 · 关键日高亮 · 备注图片</p>
+    </div>
+    <div class="feature">
+      <h4>📊 总结</h4>
+      <p>浮动计时器 · 标签分类 · 周月年图表 · 体重记录 · GitHub 风格热力图</p>
+    </div>
+    <div class="feature">
+      <h4>📔 日记</h4>
+      <p>手动写作 · 心情标签 · OCR 截图识别（ChatGPT 截图转日记）</p>
+    </div>
+    <div class="feature">
+      <h4>📋 SOP</h4>
+      <p>标准流程模板 · 步骤化执行 · 联动日历（一键展开到日计划）</p>
+    </div>
+  </div>
+</div>
+
+<!-- 项目结构 -->
+<div class="section">
+  <h2>📂 项目文件结构（共 62 个文件）</h2>
+  <div class="tree">
+<div class="folder">life-organizer/</div>
+├── <span class="comment">📄 文档</span>
+│   ├── <span class="file">README.md</span>              <span class="comment">项目介绍</span>
+│   └── <span class="file">DEPLOY.md</span>             <span class="comment">⭐ 零基础部署教程</span>
+├── <span class="folder">app/</span>                       <span class="comment">Next.js App Router</span>
+│   ├── <span class="folder">(main)/</span>                  <span class="comment">已登录用户主区域</span>
+│   │   ├── <span class="folder">plan/</span>                  <span class="comment">📅 计划页</span>
+│   │   ├── <span class="folder">review/</span>                <span class="comment">📊 总结页</span>
+│   │   ├── <span class="folder">diary/</span>                 <span class="comment">📔 日记页</span>
+│   │   ├── <span class="folder">sop/</span>                   <span class="comment">📋 SOP 库</span>
+│   │   └── <span class="folder">settings/</span>              <span class="comment">⚙️ 设置</span>
+│   ├── <span class="folder">login/</span>                   <span class="comment">🔒 登录页</span>
+│   ├── <span class="folder">api/</span>                     <span class="comment">后端路由（15个端点）</span>
+│   ├── <span class="file">manifest.json</span>          <span class="comment">PWA 配置</span>
+│   ├── <span class="file">sw.js</span>                   <span class="comment">Service Worker</span>
+│   └── <span class="file">globals.css</span>
+├── <span class="folder">components/</span>                 <span class="comment">复用组件</span>
+│   ├── <span class="folder">calendar/</span>               <span class="comment">年/月/日三视图 + 事件Modal</span>
+│   ├── <span class="folder">charts/</span>                  <span class="comment">柱状图/饼图/热力图/折线图</span>
+│   ├── <span class="folder">timer/</span>                   <span class="comment">浮动计时器</span>
+│   ├── <span class="folder">ocr/</span>                     <span class="comment">截图 OCR 识别</span>
+│   └── <span class="folder">ui/</span>                      <span class="comment">Modal/Button/Input</span>
+├── <span class="folder">lib/</span>                       <span class="comment">API 客户端、认证、类型、工具函数</span>
+├── <span class="folder">supabase/</span>
+│   └── <span class="file">schema.sql</span>            <span class="comment">⭐ 数据库表结构（10张表）</span>
+└── <span class="file">middleware.ts</span>             <span class="comment">JWT 路由鉴权</span>
+  </div>
+</div>
+
+<!-- 数据库表 -->
+<div class="section">
+  <h2>🗄️ 数据库设计（10 张表）</h2>
+  <table>
+    <tr><th>表名</th><th>作用</th></tr>
+    <tr><td><code>tags</code></td><td>时间标签 + 事件标签（带颜色、图标）</td></tr>
+    <tr><td><code>events</code></td><td>计划事件（标题、时间、提醒、重复、SOP 关联）</td></tr>
+    <tr><td><code>time_entries</code></td><td>时间记账记录</td></tr>
+    <tr><td><code>weights</code></td><td>每日体重</td></tr>
+    <tr><td><code>weight_goal</code></td><td>体重目标</td></tr>
+    <tr><td><code>diaries</code></td><td>日记内容（含 OCR 来源、图片）</td></tr>
+    <tr><td><code>sops</code></td><td>SOP 模板（步骤 JSON 数组）</td></tr>
+    <tr><td><code>sop_executions</code></td><td>SOP 执行历史</td></tr>
+    <tr><td><code>date_highlights</code></td><td>年视图的关键日标记</td></tr>
+    <tr><td><code>settings</code></td><td>用户偏好设置</td></tr>
+  </table>
+</div>
+
+<!-- 部署步骤 -->
+<div class="section">
+  <h2>🚀 你的 15 分钟部署路线</h2>
+  <div class="warning">
+    👉 详细步骤见 <code>DEPLOY.md</code>，每步都写了截图说明
+  </div>
+  <div class="steps">
+    <div class="step">在 <a href="https://github.com">GitHub</a> + <a href="https://supabase.com">Supabase</a> + <a href="https://vercel.com">Vercel</a> 三个网站注册免费账号</div>
+    <div class="step">在 Supabase 创建项目 → SQL Editor 跑 <code>schema.sql</code> → 复制 2 个 API 密钥</div>
+    <div class="step">在 GitHub 创建新仓库 → 把项目所有文件上传</div>
+    <div class="step">在 Vercel 点 "Import Project" → 选择仓库 → 添加 4 个环境变量 → Deploy</div>
+    <div class="step">部署完成后打开网址 → 输入你设置的密码登录</div>
+    <div class="step">在 iPhone Safari 打开 → 分享 → 添加到主屏幕（变成紫色日历图标）</div>
+  </div>
+</div>
+
+<!-- 部署后检查清单 -->
+<div class="section">
+  <h2>✅ 部署后立即测试清单</h2>
+  <ul class="checklist">
+    <li>能正常进入应用（说明登录、数据库、Vercel 都没问题）</li>
+    <li>在「计划」模块创建一个事件并保存</li>
+    <li>在「总结」模块启动计时器，开始一次任务</li>
+    <li>在「日记」模块写一段文字 + 添加一张图片</li>
+    <li>在「SOP」模块创建一个「晨间流程」模板</li>
+    <li>在设置页导出一次数据 JSON 备份</li>
+    <li>在 iPhone Safari 打开 → 添加到主屏幕</li>
+    <li>在主屏幕图标启动，应该全屏无地址栏</li>
+  </ul>
+</div>
+
+<!-- 安全说明 -->
+<div class="section">
+  <h2>🔒 安全性</h2>
+  <table>
+    <tr><th>措施</th><th>说明</th></tr>
+    <tr><td>单密码保护</td><td>登录页只接受 <code>APP_LOGIN_PASSWORD</code></td></tr>
+    <tr><td>JWT 签名</td><td>所有 API 通过 HMAC-SHA256 签名验证</td></tr>
+    <tr><td>HttpOnly Cookie</td><td>Token 存在 HttpOnly cookie 防 XSS</td></tr>
+    <tr><td>中间件守卫</td><td>所有非登录路径强制鉴权</td></tr>
+    <tr><td>HTTPS</td><td>Vercel 自动证书，全站加密</td></tr>
+    <tr><td>单一账户</td><td>RLS + 密码模式 = 只你一人</td></tr>
+  </table>
+  <p style="margin-top: 12px; font-size: 13px; color: #6b7280;">数据存储在 Supabase 全球分布式 PostgreSQL，可用性 99.9%。</p>
+</div>
+
+<!-- FAQ -->
+<div class="section">
+  <h2>🆘 常见问题</h2>
+  <h3>Q：忘了密码怎么办？</h3>
+  <p>登录 Vercel → 项目 → Settings → Environment Variables → 改 <code>APP_LOGIN_PASSWORD</code> → 重部署</p>
+  <h3>Q：能在 Windows 上部署吗？</h3>
+  <p>可以。整个流程都在浏览器里，与操作系统无关。</p>
+  <h3>Q：OCR 准确率？</h3>
+  <p>Tesseract.js 对清晰截图 85-95%。模糊手写体可能略低。</p>
+  <h3>Q：能换 ChatGPT 直连吗？</h3>
+  <p>当前 OCR 方案完全免费。如要 ChatGPT API 直接对话，需要每月约 $5 费用，可以以后扩展。</p>
+</div>
+
+<div style="text-align: center; padding: 30px 0; color: #6b7280; font-size: 13px;">
+  🎉 项目已 100% 完成，立即打开 <code>DEPLOY.md</code> 开始部署吧
+</div>
+
+</div>
+</body>
+</html>

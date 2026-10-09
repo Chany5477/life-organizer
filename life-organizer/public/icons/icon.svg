@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#a78bfa"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="100" fill="url(#g)"/>
+  <!-- 日历样式 -->
+  <rect x="96" y="144" width="320" height="240" rx="20" fill="#ffffff"/>
+  <rect x="96" y="144" width="320" height="60" rx="20" fill="#1f1f1f"/>
+  <rect x="96" y="184" width="320" height="20" fill="#1f1f1f"/>
+  <circle cx="160" cy="120" r="14" fill="#ffffff"/>
+  <circle cx="352" cy="120" r="14" fill="#ffffff"/>
+  <!-- 日历网格 -->
+  <g fill="#7c3aed">
+    <circle cx="156" cy="260" r="10"/>
+    <circle cx="206" cy="260" r="10"/>
+    <circle cx="256" cy="260" r="10"/>
+    <circle cx="306" cy="260" r="10"/>
+    <circle cx="356" cy="260" r="10"/>
+    <circle cx="156" cy="320" r="10"/>
+    <circle cx="356" cy="320" r="10"/>
+  </g>
+  <g fill="#e5e7eb">
+    <circle cx="206" cy="320" r="10"/>
+    <circle cx="256" cy="320" r="10"/>
+    <circle cx="306" cy="320" r="10"/>
+    <circle cx="156" cy="370" r="10"/>
+    <circle cx="206" cy="370" r="10"/>
+    <circle cx="256" cy="370" r="10"/>
+    <circle cx="306" cy="370" r="10"/>
+    <circle cx="356" cy="370" r="10"/>
+  </g>
+</svg>
